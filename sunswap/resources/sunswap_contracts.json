@@ -1,0 +1,68 @@
+{
+    "mainnet": {
+        "router": "TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "description": "SunSwap V2 contracts on TRON mainnet"
+    },
+    "nile": {
+        "router": "TBD",
+        "factory": "TBD",
+        "description": "SunSwap contracts on Nile testnet (limited liquidity)"
+    },
+    "abi": {
+        "getAmountsOut": {
+            "name": "getAmountsOut",
+            "type": "function",
+            "stateMutability": "view",
+            "inputs": [
+                {
+                    "name": "amountIn",
+                    "type": "uint256"
+                },
+                {
+                    "name": "path",
+                    "type": "address[]"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "amounts",
+                    "type": "uint256[]"
+                }
+            ]
+        },
+        "swapExactTokensForTokens": {
+            "name": "swapExactTokensForTokens",
+            "type": "function",
+            "stateMutability": "nonpayable",
+            "inputs": [
+                {
+                    "name": "amountIn",
+                    "type": "uint256"
+                },
+                {
+                    "name": "amountOutMin",
+                    "type": "uint256"
+                },
+                {
+                    "name": "path",
+                    "type": "address[]"
+                },
+                {
+                    "name": "to",
+                    "type": "address"
+                },
+                {
+                    "name": "deadline",
+                    "type": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "amounts",
+                    "type": "uint256[]"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "mainnet": {
+        "USDT": {
+            "address": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+            "symbol": "USDT",
+            "name": "Tether USD",
+            "decimals": 6,
+            "description": "TRC20 USDT stablecoin"
+        },
+        "WTRX": {
+            "address": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+            "symbol": "WTRX",
+            "name": "Wrapped TRX",
+            "decimals": 6,
+            "description": "Wrapped TRX for DEX trading"
+        },
+        "USDD": {
+            "address": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+            "symbol": "USDD",
+            "name": "Decentralized USD",
+            "decimals": 18,
+            "description": "TRON's decentralized stablecoin"
+        },
+        "BTT": {
+            "address": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+            "symbol": "BTT",
+            "name": "BitTorrent",
+            "decimals": 18,
+            "description": "BitTorrent token"
+        },
+        "JST": {
+            "address": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+            "symbol": "JST",
+            "name": "JUST",
+            "decimals": 18,
+            "description": "JUST DeFi token"
+        },
+        "SUN": {
+            "address": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+            "symbol": "SUN",
+            "name": "SUN",
+            "decimals": 18,
+            "description": "SUN token"
+        }
+    },
+    "nile": {
+        "USDT": {
+            "address": "TBD",
+            "symbol": "USDT",
+            "name": "Tether USD (Testnet)",
+            "decimals": 6,
+            "description": "Testnet USDT - limited availability"
+        },
+        "WTRX": {
+            "address": "TBD",
+            "symbol": "WTRX",
+            "name": "Wrapped TRX (Testnet)",
+            "decimals": 6,
+            "description": "Testnet WTRX"
+        }
+    },
+    "notes": {
+        "decimals": "Always check token decimals before formatting amounts",
+        "wtrx": "TRX must be wrapped to WTRX for DEX trading",
+        "testnet": "Nile testnet has limited token availability and liquidity"
+    }
+}
