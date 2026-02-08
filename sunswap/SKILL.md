@@ -22,113 +22,85 @@ tags:
 
 ---
 
-## 🔴 CRITICAL: RESPECT USER'S EXACT TOKEN CHOICE - NEVER SUBSTITUTE!
+## 🔴 CRITICAL: RESPECT USER'S EXACT TOKEN CHOICE
 
-**🚨 ABSOLUTE RULE: User says what token, you use EXACTLY that token for price quote and swap!**
+**🚨 ABSOLUTE RULE: User says what token, you use EXACTLY that token!**
 
-**User says "TRX"** → Use `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (native TRX, same on all networks)
+**User says "TRX"** → `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (native, same on all networks)
 
-**User says "WTRX"** → Use network-specific address:
+**User says "WTRX"** → Network-specific address:
 - **Mainnet**: `TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR`
 - **Nile**: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a`
 
-**NEVER EVER:**
-- ❌ Assume user meant WTRX when they said TRX
-- ❌ Assume user meant TRX when they said WTRX
-- ❌ Substitute one for the other "for convenience"
-- ❌ Change the token without explicit user confirmation
+**NEVER substitute tokens!** See [INTENT_LOCK.md](INTENT_LOCK.md) for details.
 
-**ALWAYS:**
-- ✅ Use the EXACT token symbol user specified
-- ✅ Get price quote with the EXACT token user requested
-- ✅ Execute swap with the EXACT token user requested
-- ✅ If unclear, ASK the user to clarify
+**Key Differences:**
 
-See [INTENT_LOCK.md](INTENT_LOCK.md) for detailed explanation.
+| Feature | TRX (Native) | WTRX (Wrapped) |
+|---------|--------------|----------------|
+| Type | Native token | TRC20 token |
+| Approval | ❌ Not needed | ✅ Required |
+| Transaction | Via `value` parameter | Standard TRC20 transfer |
+| Address | Same on all networks | Network-specific |
 
 ---
 
 ## 🚀 Quick Reference Card
 
-### ⚠️ CRITICAL STEPS CHECKLIST - DO NOT SKIP!
-
-**Before executing ANY swap, verify these steps:**
+### ⚠️ CRITICAL STEPS CHECKLIST
 
 | Step | Action | Required? | Skip Condition |
 |------|--------|-----------|----------------|
 | 1️⃣ | **Get Price Quote** | ✅ ALWAYS | Never skip |
 | 2️⃣ | **Check Balance** | ✅ ALWAYS | Never skip |
-| 3️⃣ | **Check Allowance** | ✅ ALWAYS (for TRC20) | Skip if input is native TRX |
+| 3️⃣ | **Check Allowance** | ✅ For TRC20 only | Skip if input is native TRX |
 | 4️⃣ | **Approve Token** | ⚠️ CONDITIONAL | Skip if: (1) input is TRX OR (2) allowance >= amountIn |
 | 5️⃣ | **Execute Swap** | ✅ ALWAYS | Never skip |
 
-**🔴 MOST COMMON MISTAKE: Forgetting Step 4 (Approve)**
-
-**When you MUST approve:**
-- ✅ Input token is TRC20 (USDT, WTRX, USDC, etc.)
-- ✅ Allowance < swap amount
-- ✅ First time swapping this token
-
-**When you can SKIP approve:**
-- ❌ Input token is native TRX (sent via `value` parameter)
-- ❌ Already approved with sufficient allowance
+**🔴 MOST COMMON MISTAKE: Forgetting to approve TRC20 tokens before swap**
 
 ---
 
-### API Price Quote - Exact Format
+### API Price Quote Format
 
-**🚨 CRITICAL: Use EXACTLY the token addresses that match user's specified tokens!**
-
-**Copy this template and replace the placeholders:**
+**🚨 Use EXACTLY the token addresses that match user's specified tokens!**
 
 ```bash
 curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM_ADDRESS>&toToken=<TO_ADDRESS>&amountIn=<RAW_AMOUNT>&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
 ```
 
-**Parameter requirements:**
-- `fromToken`: Input token address **EXACTLY as user specified** (e.g., if user says "TRX", use `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`)
-- `toToken`: Output token address **EXACTLY as user specified** (e.g., if user says "USDT", use USDT address)
+**Parameters:**
+- `fromToken`: Input token address (user's exact token choice)
+- `toToken`: Output token address (user's exact token choice)
 - `amountIn`: Raw integer amount (e.g., `1000000` for 1 TRX with 6 decimals)
 - `typeList`: Always use the full list shown above
 
-**⚠️ DO NOT substitute tokens! If user says "TRX", do NOT use WTRX address!**
+---
 
 ### Complete Workflow
 
-**Follow these steps in order - DO NOT SKIP ANY STEP:**
-
 ```bash
-# Step 1: Get Price Quote (✅ REQUIRED - Always)
-curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM_ADDRESS>&toToken=<TO_ADDRESS>&amountIn=<RAW_AMOUNT>&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
+# Step 1: Get Price Quote (✅ ALWAYS)
+curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM>&toToken=<TO>&amountIn=<AMOUNT>&typeList=...'
 
-# Step 2: Check Balance (✅ REQUIRED - Always)
+# Step 2: Check Balance (✅ ALWAYS)
 # Use mcp_mcp_server_tron_get_balance and read_contract (balanceOf)
 
-# Step 3: Check Allowance (✅ REQUIRED for TRC20, ❌ Skip for TRX)
+# Step 3: Check Allowance (✅ For TRC20, ❌ Skip for TRX)
 # Use read_contract with allowance function
-# If input is native TRX → Skip to Step 5
 
-# Step 4: Approve Token (⚠️ CONDITIONAL - Only if allowance < amountIn)
-# 🔴 CRITICAL: Do NOT skip this if input is TRC20 token!
-# If allowance >= amountIn → Skip to Step 5
-# Otherwise: mcp_mcp_server_tron_write_contract (approve function)
-# Wait for approval transaction to confirm before proceeding!
+# Step 4: Approve Token (⚠️ Only if allowance < amountIn)
+# mcp_mcp_server_tron_write_contract (approve function)
+# Wait for confirmation before proceeding!
 
-# Step 5: Convert Parameters (✅ REQUIRED - Always)
-node skills/sunswap/scripts/format_swap_params.js '<quote_data[0]_json>' '<recipient_address>' '<network>' [slippage]
+# Step 5: Convert Parameters (✅ ALWAYS)
+node scripts/format_swap_params.js '<quote_json>' '<recipient>' '<network>' [slippage]
 
-# Step 6: Execute Swap (✅ REQUIRED - Always)
-# Use the JSON output from Step 5 as parameters for:
+# Step 6: Execute Swap (✅ ALWAYS)
 mcp_mcp_server_tron_write_contract({...output_from_step_5...})
 ```
 
-### When is Approve Needed?
-
-| Input Token | Approve Needed? | Reason |
-|-------------|-----------------|--------|
-| Native TRX | ❌ NO | Sent via `value` parameter |
-| TRC20 (USDT, WTRX, etc.) | ✅ YES | Router needs permission to spend your tokens |
-| Already approved | ❌ NO | If `allowance >= amountIn`, skip approve |
+---
 
 ### Quick Token Lookup
 
@@ -204,13 +176,10 @@ This skill helps you execute token swaps on SunSwap DEX. Follow the workflow ste
 
 **Always required**: Get the best swap route and expected output.
 
-**🚨 CRITICAL**: Use EXACTLY the token symbols user specified. DO NOT substitute TRX for WTRX or vice versa!
-
 **User Message**:
 ```
 💰 Step 1: Getting price quote
 📝 Querying: [AMOUNT] [FROM_TOKEN] → [TO_TOKEN]
-📝 Using token addresses exactly as user specified
 ```
 
 ---
@@ -256,100 +225,30 @@ This skill helps you execute token swaps on SunSwap DEX. Follow the workflow ste
 
 ---
 
-## 🔧 Helper Tools
-
-### Parameter Formatter Script
-
-**Location**: `skills/sunswap/scripts/format_swap_params.js`
-
-**Purpose**: Automatically generates MCP-ready parameters from API quote.
-
-**Usage**:
-```bash
-node skills/sunswap/scripts/format_swap_params.js \
-  '<quote_json>' \
-  '<recipient_address>' \
-  '<network>' \
-  [slippage]
-```
-
-**Output**: Complete MCP `write_contract` parameters (JSON).
-
----
-
-## 📚 Resources
+## 📚 Resources & Tools
 
 - **Token Registry**: [resources/common_tokens.json](resources/common_tokens.json)
 - **Contract Addresses**: [resources/sunswap_contracts.json](resources/sunswap_contracts.json)
+- **Token Lookup**: [scripts/lookup_token.js](scripts/lookup_token.js) - Quick token address finder
+- **Parameter Formatter**: [scripts/format_swap_params.js](scripts/format_swap_params.js) - Converts API quote to MCP params
 - **Complete Examples**: [examples/](examples/) - Real working examples with full output
-- **Token Lookup Tool**: [scripts/lookup_token.js](scripts/lookup_token.js) - Quick token address finder
 
 ---
 
 ## 📖 Examples
 
-**Two complete examples with full output:**
-
 1. **[TRX → USDJ](examples/complete_swap_example.md)** - Native TRX swap (no approve needed)
-   - Simple 3-step workflow
-   - Direct execution with `value` parameter
-   - Lower gas cost
-
 2. **[USDT → TRX](examples/swap_with_approve.md)** - TRC20 token swap (approve required)
-   - Complete 4-step workflow including approve
-   - Balance and allowance checking
-   - Higher gas cost (includes approve)
-
-**Use these as references when implementing swaps!**
 
 ---
 
 ## 🚨 Critical Rules
 
-1. **User Communication**: Announce every step before and after execution
-2. **No Shortcuts**: Follow all steps in order
-3. **🔴 RESPECT USER'S EXACT TOKEN CHOICE - MOST IMPORTANT RULE**:
-   - **User says "TRX"** → Use TRX address for price quote AND swap
-   - **User says "WTRX"** → Use network-specific WTRX address for price quote AND swap
-   - **User says "USDT"** → Use USDT address for price quote AND swap
-   - **NEVER EVER substitute or change the token without user's explicit confirmation**
-   - **NEVER assume** user meant a different token
-   - **If unclear**, STOP and ASK the user to clarify which token they want
-   - This applies to BOTH price quote API call AND swap execution
-4. **Use Helper Script**: Always use `format_swap_params.js` for Step 4
+1. **Respect User's Token Choice**: Use EXACTLY the token user specified (see top of document)
+2. **User Communication**: Announce every step before and after execution
+3. **No Shortcuts**: Follow all steps in order
+4. **Use Helper Script**: Always use `format_swap_params.js` for parameter formatting
 5. **Include ABI**: Always include ABI for Nile testnet
-
----
-
-## ⚠️ TRX vs WTRX - Critical Distinction
-
-**TRX (Native)**:
-- Address: `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (same on all networks)
-- This is the native TRON token
-- When used as input: Send via `value` parameter (no approval needed)
-- User says: "swap TRX to USDT" → Use TRX address
-
-**WTRX (Wrapped)**:
-- **Mainnet**: `TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR`
-- **Nile**: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a`
-- This is a TRC20 token wrapper
-- When used as input: Requires approval like any other token
-- User says: "swap WTRX to USDT" → Use network-specific WTRX address
-
-**Example - User Intent Matters:**
-```
-✅ CORRECT:
-User: "swap 1 TRX to USDT on nile"
-Agent: *uses TRX address T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb*
-
-✅ CORRECT:
-User: "swap 1 WTRX to USDT on nile"
-Agent: *uses WTRX address TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a*
-
-✅ CORRECT:
-User: "swap 1 WTRX to USDT on mainnet"
-Agent: *uses WTRX address TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR*
-```
 
 ---
 
