@@ -22,12 +22,29 @@ tags:
 
 ---
 
-## 🔴 CRITICAL: TRX vs WTRX - NEVER SUBSTITUTE!
+## 🔴 CRITICAL: RESPECT USER'S EXACT TOKEN CHOICE - NEVER SUBSTITUTE!
 
-**User says "TRX"** → Use `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (native TRX)
-**User says "WTRX"** → Use `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a` (wrapped TRC20)
+**🚨 ABSOLUTE RULE: User says what token, you use EXACTLY that token for price quote and swap!**
 
-**NEVER assume user meant WTRX when they said TRX!** See [INTENT_LOCK.md](INTENT_LOCK.md) for details.
+**User says "TRX"** → Use `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (native TRX, same on all networks)
+
+**User says "WTRX"** → Use network-specific address:
+- **Mainnet**: `TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR`
+- **Nile**: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a`
+
+**NEVER EVER:**
+- ❌ Assume user meant WTRX when they said TRX
+- ❌ Assume user meant TRX when they said WTRX
+- ❌ Substitute one for the other "for convenience"
+- ❌ Change the token without explicit user confirmation
+
+**ALWAYS:**
+- ✅ Use the EXACT token symbol user specified
+- ✅ Get price quote with the EXACT token user requested
+- ✅ Execute swap with the EXACT token user requested
+- ✅ If unclear, ASK the user to clarify
+
+See [INTENT_LOCK.md](INTENT_LOCK.md) for detailed explanation.
 
 ---
 
@@ -60,6 +77,8 @@ tags:
 
 ### API Price Quote - Exact Format
 
+**🚨 CRITICAL: Use EXACTLY the token addresses that match user's specified tokens!**
+
 **Copy this template and replace the placeholders:**
 
 ```bash
@@ -67,10 +86,12 @@ curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM_ADDRESS>&toToke
 ```
 
 **Parameter requirements:**
-- `fromToken`: Input token address (e.g., `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`)
-- `toToken`: Output token address (e.g., `TLBaRhANQoJFTqre9Nf1mjuwNWjCJeYqUL`)
+- `fromToken`: Input token address **EXACTLY as user specified** (e.g., if user says "TRX", use `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`)
+- `toToken`: Output token address **EXACTLY as user specified** (e.g., if user says "USDT", use USDT address)
 - `amountIn`: Raw integer amount (e.g., `1000000` for 1 TRX with 6 decimals)
 - `typeList`: Always use the full list shown above
+
+**⚠️ DO NOT substitute tokens! If user says "TRX", do NOT use WTRX address!**
 
 ### Complete Workflow
 
@@ -183,10 +204,13 @@ This skill helps you execute token swaps on SunSwap DEX. Follow the workflow ste
 
 **Always required**: Get the best swap route and expected output.
 
+**🚨 CRITICAL**: Use EXACTLY the token symbols user specified. DO NOT substitute TRX for WTRX or vice versa!
+
 **User Message**:
 ```
 💰 Step 1: Getting price quote
 📝 Querying: [AMOUNT] [FROM_TOKEN] → [TO_TOKEN]
+📝 Using token addresses exactly as user specified
 ```
 
 ---
@@ -284,12 +308,14 @@ node skills/sunswap/scripts/format_swap_params.js \
 
 1. **User Communication**: Announce every step before and after execution
 2. **No Shortcuts**: Follow all steps in order
-3. **🔴 RESPECT USER INTENT - TRX vs WTRX**:
-   - If user says "TRX", use TRX address: `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`
-   - If user says "WTRX", use WTRX address: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a`
-   - **NEVER** substitute one for the other
-   - **NEVER** assume user meant WTRX when they said TRX
-   - When in doubt, ask the user to clarify
+3. **🔴 RESPECT USER'S EXACT TOKEN CHOICE - MOST IMPORTANT RULE**:
+   - **User says "TRX"** → Use TRX address for price quote AND swap
+   - **User says "WTRX"** → Use network-specific WTRX address for price quote AND swap
+   - **User says "USDT"** → Use USDT address for price quote AND swap
+   - **NEVER EVER substitute or change the token without user's explicit confirmation**
+   - **NEVER assume** user meant a different token
+   - **If unclear**, STOP and ASK the user to clarify which token they want
+   - This applies to BOTH price quote API call AND swap execution
 4. **Use Helper Script**: Always use `format_swap_params.js` for Step 4
 5. **Include ABI**: Always include ABI for Nile testnet
 
@@ -298,22 +324,31 @@ node skills/sunswap/scripts/format_swap_params.js \
 ## ⚠️ TRX vs WTRX - Critical Distinction
 
 **TRX (Native)**:
-- Address: `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`
+- Address: `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (same on all networks)
 - This is the native TRON token
 - When used as input: Send via `value` parameter (no approval needed)
 - User says: "swap TRX to USDT" → Use TRX address
 
 **WTRX (Wrapped)**:
-- Address: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a` (mainnet) or `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a` (nile)
+- **Mainnet**: `TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR`
+- **Nile**: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a`
 - This is a TRC20 token wrapper
 - When used as input: Requires approval like any other token
-- User says: "swap WTRX to USDT" → Use WTRX address
+- User says: "swap WTRX to USDT" → Use network-specific WTRX address
 
 **Example - User Intent Matters:**
 ```
 ✅ CORRECT:
-User: "swap 1 TRX to USDT"
+User: "swap 1 TRX to USDT on nile"
 Agent: *uses TRX address T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb*
+
+✅ CORRECT:
+User: "swap 1 WTRX to USDT on nile"
+Agent: *uses WTRX address TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a*
+
+✅ CORRECT:
+User: "swap 1 WTRX to USDT on mainnet"
+Agent: *uses WTRX address TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR*
 ```
 
 ---

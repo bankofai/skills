@@ -1,27 +1,40 @@
 # 🔴 INTENT LOCK - READ THIS FIRST
 
-## Critical Rule: Respect User Token Choice
+## 🚨 ABSOLUTE CRITICAL RULE: USE EXACTLY THE TOKEN USER SPECIFIED
 
-When a user specifies a token, you **MUST** use exactly that token. **DO NOT** make substitutions.
+**When a user specifies a token, you MUST use EXACTLY that token for:**
+1. ✅ Price quote API call
+2. ✅ Swap execution
+3. ✅ All intermediate steps
+
+**NEVER EVER make substitutions, assumptions, or "helpful" changes!**
 
 ---
 
-## TRX vs WTRX
+## TRX vs WTRX - Most Common Mistake
 
-This is the most common mistake. **Read carefully:**
+**These are TWO COMPLETELY DIFFERENT tokens. Read carefully:**
 
 ### User says "TRX"
-- ✅ Use address: `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`
+- ✅ Use address: `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (same on all networks)
 - ✅ This is the native TRON token
 - ✅ Send via `value` parameter in transaction
-- ❌ **DO NOT** use WTRX address
+- ✅ **Get price quote using TRX address**
+- ✅ **Execute swap using TRX address**
+- ❌ **DO NOT** use WTRX address for price quote
+- ❌ **DO NOT** use WTRX address for swap
 - ❌ **DO NOT** assume user meant WTRX
 
 ### User says "WTRX"
-- ✅ Use address: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a` (nile)
+- ✅ Use network-specific address:
+  - **Mainnet**: `TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR`
+  - **Nile**: `TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a`
 - ✅ This is a TRC20 wrapped token
 - ✅ Requires approval before swap
-- ❌ **DO NOT** use TRX address
+- ✅ **Get price quote using WTRX address**
+- ✅ **Execute swap using WTRX address**
+- ❌ **DO NOT** use TRX address for price quote
+- ❌ **DO NOT** use TRX address for swap
 - ❌ **DO NOT** assume user meant TRX
 
 ---
@@ -44,8 +57,17 @@ This is the most common mistake. **Read carefully:**
 
 💰 Step 1: Getting price quote
 📝 Querying: 1 TRX → USDT on nile
-   • Using fromToken: T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb
+   • Using fromToken: T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb (TRX address)
+   • API call: curl '...?fromToken=T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb&...'
+
+✅ Step 1 Complete
+📊 Price quote received for TRX → USDT
+   • Expected output: X USDT
+
+[Continue with TRX for all remaining steps...]
 ```
+
+**Key Point**: Used TRX address in BOTH price quote AND swap execution.
 
 ---
 
@@ -65,9 +87,15 @@ This is the most common mistake. **Read carefully:**
 💰 Step 1: Getting price quote
 📝 Querying: 1 WTRX → USDT on nile  ← WRONG!
    • Using fromToken: TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a  ← WRONG!
+   • API call: curl '...?fromToken=TYsbWxNnyTgsZaTFaue9hqpxkU3Fkco94a&...'  ← WRONG!
 ```
 
-**Why this is wrong**: User said "TRX", not "WTRX". You changed their intent.
+**Why this is COMPLETELY WRONG**: 
+- User said "TRX", not "WTRX"
+- You changed their intent without permission
+- Price quote is for WRONG token
+- Swap will execute with WRONG token
+- User will get unexpected results
 
 ---
 
@@ -101,11 +129,14 @@ This rule applies to **ALL** tokens, not just TRX/WTRX:
 
 ---
 
-## Summary
+## Summary - The Golden Rules
 
-1. ✅ Use the exact token the user specified
-2. ❌ Never substitute TRX ↔ WTRX
-3. ❌ Never substitute any token without asking
-4. 🤔 When in doubt, ask the user to clarify
+1. ✅ **Use the EXACT token the user specified in their request**
+2. ✅ **Use that EXACT token for price quote API call**
+3. ✅ **Use that EXACT token for swap execution**
+4. ❌ **NEVER substitute TRX ↔ WTRX**
+5. ❌ **NEVER substitute any token without explicit user confirmation**
+6. ❌ **NEVER make "helpful" assumptions about what user "really meant"**
+7. 🤔 **When in doubt, STOP and ASK the user to clarify**
 
-**This is non-negotiable. User intent is sacred.**
+**This is non-negotiable. User intent is sacred. What they say is what you use.**
