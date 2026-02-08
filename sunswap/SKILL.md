@@ -1,7 +1,7 @@
 ---
 name: SunSwap DEX Trading
 description: Execute token swaps on SunSwap DEX for TRON blockchain.
-version: 2.3.0
+version: 2.4.0
 dependencies:
   - mcp-server-tron
 tags:
@@ -14,6 +14,14 @@ tags:
 
 # SunSwap DEX Trading Skill
 
+## 🚨 STOP! READ THIS FIRST - DO NOT SKIP!
+
+**Before attempting any swap, read the Quick Reference Card below.**
+
+**The ONLY correct workflow is documented below. Follow it exactly.**
+
+---
+
 ## 🔴 CRITICAL: TRX vs WTRX - NEVER SUBSTITUTE!
 
 **User says "TRX"** → Use `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb` (native TRX)
@@ -25,26 +33,72 @@ tags:
 
 ## 🚀 Quick Reference Card
 
-### Complete Workflow
+### ⚠️ CRITICAL STEPS CHECKLIST - DO NOT SKIP!
+
+**Before executing ANY swap, verify these steps:**
+
+| Step | Action | Required? | Skip Condition |
+|------|--------|-----------|----------------|
+| 1️⃣ | **Get Price Quote** | ✅ ALWAYS | Never skip |
+| 2️⃣ | **Check Balance** | ✅ ALWAYS | Never skip |
+| 3️⃣ | **Check Allowance** | ✅ ALWAYS (for TRC20) | Skip if input is native TRX |
+| 4️⃣ | **Approve Token** | ⚠️ CONDITIONAL | Skip if: (1) input is TRX OR (2) allowance >= amountIn |
+| 5️⃣ | **Execute Swap** | ✅ ALWAYS | Never skip |
+
+**🔴 MOST COMMON MISTAKE: Forgetting Step 4 (Approve)**
+
+**When you MUST approve:**
+- ✅ Input token is TRC20 (USDT, WTRX, USDC, etc.)
+- ✅ Allowance < swap amount
+- ✅ First time swapping this token
+
+**When you can SKIP approve:**
+- ❌ Input token is native TRX (sent via `value` parameter)
+- ❌ Already approved with sufficient allowance
+
+---
+
+### API Price Quote - Exact Format
+
+**Copy this template and replace the placeholders:**
 
 ```bash
-# Step 1: Get Price Quote (REQUIRED - Always)
+curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM_ADDRESS>&toToken=<TO_ADDRESS>&amountIn=<RAW_AMOUNT>&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
+```
+
+**Parameter requirements:**
+- `fromToken`: Input token address (e.g., `T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb`)
+- `toToken`: Output token address (e.g., `TLBaRhANQoJFTqre9Nf1mjuwNWjCJeYqUL`)
+- `amountIn`: Raw integer amount (e.g., `1000000` for 1 TRX with 6 decimals)
+- `typeList`: Always use the full list shown above
+
+### Complete Workflow
+
+**Follow these steps in order - DO NOT SKIP ANY STEP:**
+
+```bash
+# Step 1: Get Price Quote (✅ REQUIRED - Always)
 curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM_ADDRESS>&toToken=<TO_ADDRESS>&amountIn=<RAW_AMOUNT>&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
 
-# Step 2: Check Balance & Allowance (REQUIRED - Always)
-# Use mcp_mcp_server_tron_get_balance and read_contract (balanceOf, allowance)
+# Step 2: Check Balance (✅ REQUIRED - Always)
+# Use mcp_mcp_server_tron_get_balance and read_contract (balanceOf)
 
-# Step 3: Approve Token (CONDITIONAL - Only if input is TRC20 token)
-# Skip if input is native TRX
-# Skip if allowance >= amountIn
+# Step 3: Check Allowance (✅ REQUIRED for TRC20, ❌ Skip for TRX)
+# Use read_contract with allowance function
+# If input is native TRX → Skip to Step 5
+
+# Step 4: Approve Token (⚠️ CONDITIONAL - Only if allowance < amountIn)
+# 🔴 CRITICAL: Do NOT skip this if input is TRC20 token!
+# If allowance >= amountIn → Skip to Step 5
 # Otherwise: mcp_mcp_server_tron_write_contract (approve function)
+# Wait for approval transaction to confirm before proceeding!
 
-# Step 4: Convert Parameters (REQUIRED - Always)
+# Step 5: Convert Parameters (✅ REQUIRED - Always)
 node skills/sunswap/scripts/format_swap_params.js '<quote_data[0]_json>' '<recipient_address>' '<network>' [slippage]
 
-# Step 5: Execute Swap (REQUIRED - Always)
-# Use the JSON output from Step 4 as parameters for:
-mcp_mcp_server_tron_write_contract({...output_from_step_4...})
+# Step 6: Execute Swap (✅ REQUIRED - Always)
+# Use the JSON output from Step 5 as parameters for:
+mcp_mcp_server_tron_write_contract({...output_from_step_5...})
 ```
 
 ### When is Approve Needed?
@@ -68,14 +122,6 @@ node skills/sunswap/scripts/lookup_token.js <SYMBOL> <NETWORK>
 - **Approve**: ~5-10 TRX
 - **Swap**: ~20-50 TRX  
 - **Recommended**: Keep at least 100 TRX for gas
-
-### Common API Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| 400 Bad Request | Wrong parameter names | Use `fromToken`/`toToken`, not `tokenIn`/`tokenOut` |
-| Empty `data` array | No liquidity | Check token addresses or try different pair |
-| `amountIn` mismatch | Wrong decimals | Use raw integer (1 TRX = 1000000) |
 
 ---
 
@@ -265,10 +311,6 @@ node skills/sunswap/scripts/format_swap_params.js \
 
 **Example - User Intent Matters:**
 ```
-❌ WRONG:
-User: "swap 1 TRX to USDT"
-Agent: *uses WTRX address in query*
-
 ✅ CORRECT:
 User: "swap 1 TRX to USDT"
 Agent: *uses TRX address T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb*
@@ -287,3 +329,25 @@ Each workflow step is in a separate file to keep context focused:
 - `workflow/04_execute_swap.md` - Execute the swap
 
 **Load only the file you need for the current step.**
+
+---
+
+## 🔧 Troubleshooting
+
+**Only consult this section if you encounter errors.**
+
+### API Errors
+
+**400 Bad Request**: Check that you're using the exact API format from the Quick Reference Card above.
+
+**Empty data array**: The token pair may not have liquidity on this network. Verify token addresses are correct for the network (mainnet vs nile).
+
+**Response validation fails**: Ensure `amountIn` in the response matches your intended input amount.
+
+### Transaction Errors
+
+**INSUFFICIENT_OUTPUT_AMOUNT**: Increase slippage tolerance or split into smaller swaps.
+
+**TRANSFER_FAILED**: Check balance and allowance (return to Step 2).
+
+**EXPIRED**: Deadline passed - get a new quote and retry.

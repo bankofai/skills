@@ -1,5 +1,20 @@
 # 1. 💰 Price Quote
 
+## API Call Template
+
+**Use this exact format:**
+
+```bash
+curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM_ADDRESS>&toToken=<TO_ADDRESS>&amountIn=<RAW_AMOUNT>&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
+```
+
+**Replace placeholders:**
+- `<FROM_ADDRESS>`: Input token address
+- `<TO_ADDRESS>`: Output token address  
+- `<RAW_AMOUNT>`: Raw integer (e.g., 1000000 for 1 TRX)
+
+---
+
 ## User Communication
 
 **Before starting:**
@@ -92,13 +107,13 @@ Before using the quote, you **MUST** validate:
 
 ## 🚨 Common Errors & Solutions
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `400 Bad Request` | Wrong parameter names | Use `fromToken`/`toToken`, NOT `tokenIn`/`tokenOut` |
-| `400 Bad Request` | Missing `typeList` | Add full typeList: `PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3` |
-| Empty `data` array | No liquidity for pair | Verify token addresses are correct for the network |
-| `amountIn` mismatch | Wrong decimal precision | Use raw integer units (1 TRX = 1000000, not 1.0) |
-| Network timeout | API unavailable | Retry after a few seconds, or check network status |
+**Only consult this section if the API call fails.**
+
+| Error | Solution |
+|-------|----------|
+| 400 Bad Request | Verify you're using the exact API format from the template above |
+| Empty `data` array | Check token addresses are correct for the network |
+| `amountIn` mismatch | Ensure using raw integer units (e.g., 1000000 for 1 TRX) |
 
 ---
 
