@@ -173,6 +173,24 @@ Before executing ANY transaction, you **MUST** output this standardized block:
 - Quote Parity: [path/fees/versions all matched]
 ```
 
+## 📢 User Communication & Feedback (Mandatory)
+
+1.  **Pre-Action Announcements**:
+    - Before each major step (Quote, Approve, Swap), explicitly tell the user what you are doing.
+    - Example: "🔍 Fetching best price for 100 USDT -> TRX..." or "📝 Drafting transaction..."
+
+2.  **Post-Execution Reporting**:
+    - **Immediately** output the `txHash` after a successful `write_contract` call.
+    - **Do NOT** query the transaction status immediately (it takes 10-20s to propagate).
+    - **Standard Output**:
+      ```text
+      ✅ Transaction Broadcast!
+      TXID: [txHash]
+      
+      📝 Note: Please wait ~15-30 seconds for the transaction to be confirmed on-chain.
+      You can track it manually on TronScan: https://nile.tronscan.org/#/transaction/[txHash]
+      ```
+
 ---
 
 ## Overview
@@ -413,26 +431,33 @@ Verify: `"contractRet": "SUCCESS"`
     *   API: `["v2", "v2", "v3", "v3"]` -> Contract: `["v2", "v3"]`
 
 2.  **versionLen**: Represents the **Token Count** (nodes) for that version block.
-    *   **Logic**: `length of segment tokens`
+    *   **Logic**: Number of tokens **added** by each version segment (first segment includes starting tokens, subsequent segments add 1 new token each due to shared boundaries)
     *   Example: A -> B -> C -> D (3 hops, 4 tokens).
-        *   If all V2: `versionLen` = `[4]` (Single merged block)
-        *   If mixed: Sum of `versionLen` segments must equal `path.length`.
+        *   If all V2: `versionLen` = `[4]` (Single merged block, all 4 tokens)
+        *   If mixed (e.g., v1, v3, old3pool): `versionLen` = `[2, 1, 1]`
+            - First segment (v1): A→B uses 2 tokens [A, B]
+            - Second segment (v3): B→C adds 1 token [C] (B already counted)
+            - Third segment (old3pool): C→D adds 1 token [D] (C already counted)
+        *   **Rule**: Sum of `versionLen` segments must equal `path.length`.
 
 3.  **fees**: Do **NOT** truncate.
     *   Use the full array from API. Length must strictly equal `path.length`.
 
 ```javascript
 // Example: A -> B -> C -> D (3 hops, 4 tokens)
-// All pools are V2.
+// Mixed versions: v2, v3, v2
 
 // 1. path (4 addresses)
 path = ["T_A...", "T_B...", "T_C...", "T_D..."]
 
-// 2. poolVersion (Merged)
-poolVersion = ["v2"]
+// 2. poolVersion (Do NOT merge - different versions)
+poolVersion = ["v2", "v3", "v2"]
 
-// 3. versionLen (Token count)
-versionLen = [4]
+// 3. versionLen (Cumulative token count per segment)
+// First segment: 2 tokens [A, B]
+// Second segment: +1 token [C] (B already counted)
+// Third segment: +1 token [D] (C already counted)
+versionLen = [2, 1, 1]  // Sum = 4 = path.length ✓
 
 // 4. fees (Full array, length 4)
 fees = [3000, 3000, 3000, 0] // Keep ALL elements
@@ -462,9 +487,13 @@ path = apiResponse.tokens
 // ["v3", "v3", "v3"] -> ["v3"]
 poolVersion = mergeConsecutive(apiResponse.poolVersions)
 
-// 3. versionLen - Calculate TOKEN COUNT (nodes) for each version segment
-// For single merged "v3": length is path.length (4)
-versionLen = [path.length]
+// 3. versionLen - Calculate cumulative token count for each version segment
+// For single merged "v3": all tokens in one block
+versionLen = [path.length]  // e.g., [4]
+
+// For mixed versions (e.g., ["v1", "v3", "old3pool"]):
+// First segment gets 2 tokens, subsequent segments add 1 each
+// versionLen = [2, 1, 1]  // Sum must equal path.length
 
 // 4. fees - Use ALL fees (do NOT truncate)
 fees = apiResponse.poolFees.map(f => parseInt(f))
@@ -528,21 +557,23 @@ Scenario: 4 Tokens (A->B->C->D), all same pool version (e.g., V3 or V2).
 
 **Analysis**:
 - `poolVersion`: `["v3"]` (Merged from `["v3", "v3", "v3"]`)
-- `versionLen`: `[4]` (Represents 4 tokens in this block)
+- `versionLen`: `[4]` (All 4 tokens in single merged block)
 - `fees`: `[..., 0]` (Full length 4, no truncation)
 
-### Swap Example (Nile Testnet - Multi-Hop)
+### Swap Example (Mixed Versions - Multi-Hop)
+
+Scenario: 4 Tokens (TRX->SUN->USDJ->USDT), 3 different pool versions.
 
 ```json
 {
   "contractAddress": "TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3",
   "functionName": "swapExactInput",
   "args": [
-    ["T_A", "T_B", "T_C", "T_D"],
-    ["v3"],
-    [4],
-    [3000, 3000, 3000, 0],
-    ["20000000", "71000000", "YOUR_WALLET_ADDRESS", "1739000000"]
+    ["T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb", "TWrZRHY9aKQZcyjpovdH6qeCEyYZrRQDZt", "TLBaRhANQoJFTqre9Nf1mjuwNWjCJeYqUL", "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf"],
+    ["v1", "v3", "old3pool"],
+    [2, 1, 1],
+    [100],
+    ["1000000", "190000000", "YOUR_WALLET_ADDRESS", "1770537563"]
   ],
   "abi": [{
     "inputs": [
@@ -566,16 +597,20 @@ Scenario: 4 Tokens (A->B->C->D), all same pool version (e.g., V3 or V2).
     "stateMutability": "payable",
     "type": "function"
   }],
-  "network": "nile"
+  "network": "nile",
+  "value": "1000000"
 }
 ```
 
-**Parameter Breakdown**:
-- `args[0]` (path): Token addresses from API `tokens` (4 items)
-- `args[1]` (poolVersion): `["v3"]` (Merged)
-- `args[2]` (versionLen): `[4]` (Node count for this block)
-- `args[3]` (fees): `[3000, 3000, 3000, 0]` (Full length 4)
-- `args[4]` (data): `[amountIn, amountOutMin, recipient, deadline]` (positional tuple array; do not pass object)
+**Analysis**:
+- `poolVersion`: `["v1", "v3", "old3pool"]` (3 different versions, no merging)
+- `versionLen`: `[2, 1, 1]` (First segment: 2 tokens, subsequent segments: +1 each)
+  - v1 segment: TRX→SUN (2 tokens)
+  - v3 segment: SUN→USDJ (+1 token, SUN already counted)
+  - old3pool segment: USDJ→USDT (+1 token, USDJ already counted)
+  - Sum: 2+1+1 = 4 = path.length ✓
+- `fees`: `[0, 100, 0, 0]` (Full length 4, auto-converted from [100])
+- `value`: "1000000" (1 TRX sent as native currency)
 
 ### Verify Swap
 
