@@ -3,7 +3,7 @@
 AI Agent Skills Library - Reusable capability modules for AI agents
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/GitHub-open--aibank%2Fskills--tron-blue)](https://github.com/open-aibank/skills-tron)
+[![GitHub](https://img.shields.io/badge/GitHub-bankofai%2Fskills--tron-blue)](https://github.com/bankofai/skills-tron)
 
 ## What is a Skill?
 
@@ -27,14 +27,31 @@ Completes DEX trade
 
 ## Quick Start
 
-### 1. Clone Repository
+### For OpenClaw Users (Recommended)
+
+**Complete installation** (skills + MCP server):
+```bash
+git clone https://github.com/bankofai/skills-tron.git
+cd skills-tron/installer
+./install-skills.sh
+```
+
+
+
+This will install skills to `~/.openclaw/skills/`.
+
+**Note**: You also need the [OpenClaw Extension](https://github.com/bankofai/openclaw-extension) for these skills to work.
+
+### For Developers / Manual Installation
+
+#### 1. Clone Repository
 
 ```bash
-git clone https://github.com/open-aibank/skills-tron.git
+git clone https://github.com/bankofai/skills-tron.git
 cd skills-tron
 ```
 
-### 2. Browse Available Skills
+#### 2. Browse Available Skills
 
 ```bash
 ls -la
@@ -43,7 +60,7 @@ ls -la
 Currently available:
 - **sunswap/** - SunSwap DEX Trading (TRON token swaps)
 
-### 3. Use a Skill
+#### 3. Use a Skill
 
 Tell your AI Agent:
 ```
@@ -77,18 +94,7 @@ skills-tron/
 
 ## Available Skills
 
-### 🔄 SunSwap DEX Trading
-
-**Function**: Execute token swaps on TRON blockchain
-
-**Dependencies**: `mcp-server-tron`
-
-**Features**:
-- Query DEX prices
-- Execute token swaps
-- Slippage protection
-
-**Quick Start**: See [sunswap/README.md](sunswap/README.md)
+- **[SunSwap Skills](sunswap/README.md)**: DEX Trading (TRON token swaps)
 
 ---
 
@@ -96,61 +102,10 @@ skills-tron/
 
 ### Prerequisites
 
-1. ✅ Installed and configured AI Agent (Claude Desktop / Cursor / Antigravity)
-2. ✅ Required tools configured (e.g., `mcp-server-tron`)
-
-### Usage Steps
-
-**Step 1**: Find the skill you need
-```bash
-cd sunswap
-cat README.md
-```
-
-**Step 2**: Tell AI Agent to use the skill
-```
-Please read skills/sunswap/SKILL.md and help me complete XXX task
-```
-
-**Step 3**: AI Agent executes automatically
-- Reads SKILL.md instructions
-- Calls appropriate tools (e.g., MCP tools)
-- Returns results
-
----
-
-## Configure Dependencies
-
-### SunSwap Skill requires mcp-server-tron
-
-Edit your MCP configuration file:
-
-**Antigravity**: `~/.config/antigravity/mcp.json`
-**Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Cursor**: `.cursor/mcp.json`
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["-y", "@open-aibank/mcp-server-tron"],
-      "env": {
-        "TRON_PRIVATE_KEY": "your_private_key_here"
-      }
-    }
-  }
-}
-```
-
-**Restart your AI Agent** for changes to take effect.
-
-**Test**:
-```
-Get my TRON wallet address
-```
-
-If it returns an address, configuration is successful!
+1. ✅ Installed AI Agent (OpenClaw)
+2. ✅ Installed **OpenClaw Extension** (for TRON capabilities)
+   - Download: [bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)
+   - Follow instructions in that repository to set up the MCP server.
 
 ---
 
@@ -247,9 +202,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## Related Resources
 
 - **[AGENTS.md](AGENTS.md)** - Skill development guide
-- **[mcp-server-tron](https://github.com/open-aibank/mcp-server-tron)** - TRON blockchain MCP Server
-- **[TRC-8004 Project](https://github.com/open-aibank/trc-8004)** - Main project repository
-
+- **[OpenClaw Extension](https://github.com/bankofai/openclaw-extension)** - TRON MCP Server & Tools
 ---
 
 ## License
@@ -258,6 +211,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-**Repository**: [open-aibank/skills-tron](https://github.com/open-aibank/skills-tron)  
-**Last Updated**: 2026-02-07  
-**Maintainer**: Open AI Bank Team
+**Repository**: [bankofai/skills-tron](https://github.com/bankofai/skills-tron)  
+**Last Updated**: 2026-02-09  
+**Maintainer**: Bank of AI Team

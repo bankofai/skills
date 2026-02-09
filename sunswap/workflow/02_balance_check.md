@@ -10,12 +10,7 @@ Confirm you have enough tokens for the swap and that the Router is authorized to
 
 **FIRST: Identify the wallet address to check.**
 
-### Tool: `mcp_mcp_server_tron_get_wallet_address`
-
-```javascript
-// Get the configured wallet address
-mcp_mcp_server_tron_get_wallet_address()
-```
+**Method**: Get the configured wallet address from your TRON wallet provider.
 
 **Returns**: Your wallet address in Base58 format (e.g., `TL9kq3Fvw7dSpjgn3rBB8aJS8zhW8GvqGH`)
 
@@ -43,14 +38,7 @@ mcp_mcp_server_tron_get_wallet_address()
 | Swap | 20-50 TRX | Varies by route complexity |
 | **Recommended Minimum** | **100 TRX** | Safe buffer for multiple operations |
 
-**Check your TRX balance using the wallet address from Step 2.0:**
-```javascript
-// Use mcp_mcp_server_tron_get_balance
-{
-  "address": "WALLET_ADDRESS_FROM_STEP_2.0",
-  "network": "nile"  // or "mainnet"
-}
-```
+**Action**: Query the TRX (native token) balance for the wallet address from Step 2.0.
 
 **Result Interpretation:**
 - ✅ **TRX Balance ≥ 100 TRX**: Sufficient for operations
@@ -75,58 +63,42 @@ mcp_mcp_server_tron_get_wallet_address()
 
 ### Case B: From Token is TRC20 (USDT, USDC, WTRX, etc.)
 
-**Tool**: `read_contract` -> `balanceOf`
+**Action**: Call the `balanceOf` function on the from token contract.
 
-- **Contract Address**: From token address (from Step 0 or user input)
-- **Function**: `balanceOf`
-- **Args**: `[WALLET_ADDRESS_FROM_STEP_2.0]`
-- **Output**: Token Balance (Raw Integer, with token's decimals)
-- **Check**: `balance >= amountIn`
-  - *If insufficient*: **STOP**. Notify user they don't have enough tokens.
+**Parameters**:
+- **Contract**: From token address (from Step 0 or user input)
+- **Function**: `balanceOf(address)`
+- **Argument**: Wallet address from Step 2.0
 
-**Example (checking USDT balance on Nile):**
-```javascript
-mcp_mcp_server_tron_read_contract({
-  contractAddress: "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",  // USDT on Nile
-  functionName: "balanceOf",
-  args: ["WALLET_ADDRESS_FROM_STEP_2.0"],
-  network: "nile"
-})
-// Returns: "6685283637" (raw amount with 6 decimals = 6685.283637 USDT)
-```
+**Returns**: Token balance as raw integer (includes token's decimals)
+- Example: `6685283637` with 6 decimals = 6685.283637 USDT
+
+**Check**: `balance >= amountIn`
+- *If insufficient*: **STOP**. Notify user they don't have enough tokens.
 
 **Note**: TRX balance from Step 2.1 must still be >= 100 TRX for gas fees.
 
 ---
 
 ## 🔐 Step 2.3: Check Allowance
-**Tool**: `read_contract` -> `allowance`
 
-- **Contract Address**: Input token address
-- **Function**: `allowance`
-- **Owner**: Wallet address from Step 2.0
-- **Spender**: Smart Router Address
-  - Nile: `TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax`
-  - Mainnet: `TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3`
-- **Output**: Allowed Amount (Raw Integer)
+**Action**: Call the `allowance` function on the from token contract to check if the router is authorized.
 
-**Example**:
-```javascript
-mcp_mcp_server_tron_read_contract({
-  contractAddress: "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",  // USDT on Nile
-  functionName: "allowance",
-  args: [
-    "WALLET_ADDRESS_FROM_STEP_2.0",  // owner
-    "TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax"  // spender (router)
-  ],
-  network: "nile"
-})
-```
+**Parameters**:
+- **Contract**: From token address
+- **Function**: `allowance(address owner, address spender)`
+- **Arguments**:
+  - `owner`: Wallet address from Step 2.0
+  - `spender`: SunSwap Router address
+    - Nile: `TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax`
+    - Mainnet: `TMEkn7zwGJvJsRoEkKTKfGRGZS2yMdVmu3`
+
+**Returns**: Allowed amount as raw integer (includes token's decimals)
 
 **Decision**:
 - If `allowance >= amountIn`: **Proceed to Step 4** (Skip Step 3).
 - If `allowance < amountIn`: **Proceed to Step 3** (Approve).
-- If input token is TRX (Native): **Skip Step 3**. (No approval needed).
+- If from token is TRX (Native): **Skip this step and Step 3**. (No approval needed).
 
 ## ⚠️ Important Note
 **Nile Testnet**: You **MUST** include the `abi` parameter for `balanceOf` and `allowance`.
