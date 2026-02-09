@@ -3,7 +3,8 @@ import {
   TronClientSigner,
   X402Client,
   X402FetchClient,
-  ExactTronClientMechanism
+  ExactTronClientMechanism,
+  SufficientBalancePolicy
 } from '@bankofai/x402-tron';
 // @ts-ignore
 import TronWeb from 'tronweb';
@@ -278,6 +279,7 @@ async function main() {
     const client = new X402Client();
     // Register ONLY for the configured network to avoid signing for wrong networks
     client.register(`tron:${config.network}`, mechanism);
+    client.registerPolicy(new SufficientBalancePolicy(signer));
 
     // 5. Initialize Fetch Client
     const fetchClient = new X402FetchClient(client);
