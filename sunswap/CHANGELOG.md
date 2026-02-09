@@ -1,187 +1,174 @@
 # SunSwap Skill Changelog
 
-## Version 2.3.0 (2026-02-08)
+## Version 1.0.0 (2026-02-09)
 
-### 🎉 Major Improvements
+### 🎉 Initial Release
 
-#### 1. Quick Reference Card
-- Added comprehensive quick reference at the top of SKILL.md
-- **Includes complete 5-step workflow (with conditional approve step)**
-- **Added "When is Approve Needed?" decision table**
-- Common API errors and solutions table
-- Gas fee estimates
-- Quick token lookup command
-
-#### 2. Enhanced Error Handling
-- Added detailed error table in `01_price_quote.md`
-- Common causes and solutions for each error type
-- Network timeout handling guidance
-- Parameter validation examples
-
-#### 3. New Tools
-
-**Token Lookup Tool** (`scripts/lookup_token.js`)
-```bash
-node skills/sunswap/scripts/lookup_token.js <SYMBOL> <NETWORK>
-```
-- Quickly find token addresses without opening JSON files
-- Shows full token details (name, address, decimals, description)
-- Outputs both human-readable and JSON formats
-- Helpful error messages with available options
-
-**Enhanced Parameter Formatter** (`scripts/format_swap_params.js`)
-- Now shows detailed validation output
-- Displays all validation metrics (pathLength, versionLen, fees, etc.)
-- Clear instructions for using with MCP
-- Better error messages
-
-#### 4. Complete Examples
-
-**New Examples Directory** (`examples/`)
-- `complete_swap_example.md` - Full walkthrough of 1 TRX → USDJ swap (no approve)
-- `swap_with_approve.md` - Full walkthrough of 10 USDT → TRX swap (with approve)
-- Real API responses and outputs
-- Step-by-step with actual commands
-- Transaction verification
-- Common mistakes to avoid
-- Comparison table: TRX vs TRC20 input
-
-**Examples README** (`examples/README.md`)
-- Overview of all examples
-- Common swap patterns
-- Tips for success
-- Quick reference links
-
-#### 5. Interactive Checklists
-
-Added completion checklists to all workflow files:
-- `01_price_quote.md` - 6-item checklist before proceeding
-- `02_balance_check.md` - 4-item checklist with gas requirements
-- `03_approve.md` - 4-item checklist for approval verification
-- `04_execute_swap.md` - 5-item checklist for swap completion
-
-#### 6. Gas Fee Documentation
-
-**New Section in `02_balance_check.md`**
-- Detailed gas fee estimates for each operation
-- Approve: 5-10 TRX
-- Swap: 20-50 TRX
-- Recommended minimum: 100 TRX
-- TRX balance check before token balance
-
-#### 7. TRX vs WTRX Warnings
-
-**Enhanced Visibility**
-- Moved to top of SKILL.md with red alert emoji
-- Repeated in `01_price_quote.md` before API call
-- Clear examples of correct vs incorrect usage
-- Reference to INTENT_LOCK.md
-
-#### 8. Success Message Template
-
-Added to `04_execute_swap.md`:
-- Standardized success message format
-- Includes all key information
-- TronScan link for verification
-- Celebration emoji 🎉
+First stable release of the SunSwap DEX Trading Skill for TRON blockchain.
 
 ---
 
-## Migration Guide
+## Features
+
+### Core Workflow
+
+**5-Step Swap Process:**
+1. **Step 0**: Token Address Lookup (optional)
+2. **Step 1**: Price Quote - Query SunSwap Smart Router API
+3. **Step 2**: Balance & Allowance Check - Verify wallet balance and token approval
+4. **Step 3**: Approve Token (conditional) - Authorize router if needed
+5. **Step 4**: Execute Swap - Perform the token swap
+
+### Documentation
+
+**Main Files:**
+- `SKILL.md` - Complete skill documentation with quick reference card
+- `README.md` - Quick start guide
+- `INTENT_LOCK.md` - Critical rules for TRX vs WTRX handling
+
+**Workflow Files:**
+- `workflow/00_token_lookup.md` - Token address lookup
+- `workflow/01_price_quote.md` - Get swap quote from API
+- `workflow/02_balance_check.md` - Verify balance and allowance
+- `workflow/03_approve.md` - Approve token spending
+- `workflow/04_execute_swap.md` - Execute the swap
+
+**Examples:**
+- `examples/complete_swap_example.md` - Full TRX → USDJ swap walkthrough
+- `examples/swap_with_approve.md` - Full USDT → TRX swap with approval
+- `examples/README.md` - Examples overview
+
+### Tools & Resources
+
+**Helper Scripts:**
+- `scripts/lookup_token.js` - Quick token address finder
+- `scripts/format_swap_params.js` - Convert API quote to transaction parameters
+
+**Resource Files:**
+- `resources/common_tokens.json` - Token registry (USDT, WTRX, TRX, USDC, etc.)
+- `resources/sunswap_contracts.json` - Contract addresses and ABIs
+
+### Key Features
+
+✅ **Smart Router Integration** - Optimal routing across V1/V2/V3/PSM/Curve pools
+✅ **Multi-Network Support** - Mainnet and Nile testnet
+✅ **TRX vs WTRX Handling** - Clear distinction and warnings
+✅ **Gas Fee Estimates** - Detailed gas requirements for each operation
+✅ **Complete Examples** - Real-world swap walkthroughs with actual outputs
+✅ **Interactive Checklists** - Step-by-step verification at each stage
+✅ **Error Handling** - Common errors and solutions documented
+✅ **Decoupled Design** - Not tied to specific MCP implementation
+
+---
+
+## Network Support
+
+| Network | Smart Router | API Endpoint |
+|---------|-------------|--------------|
+| **Mainnet** | `TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3` | `https://rot.endjgfsv.link/swap/router` |
+| **Nile** | `TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax` | `https://tnrouter.endjgfsv.link/swap/router` |
+
+---
+
+## Dependencies
+
+- **mcp-server-tron** - TRON blockchain MCP server for transaction execution
+
+---
+
+## Usage
+
+### Quick Start
+
+```bash
+# 1. Find token addresses
+node scripts/lookup_token.js USDT nile
+
+# 2. Get price quote
+curl 'https://tnrouter.endjgfsv.link/swap/router?fromToken=<FROM>&toToken=<TO>&amountIn=<AMOUNT>&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
+
+# 3. Convert parameters
+node scripts/format_swap_params.js '<quote_json>' '<recipient>' '<network>' [slippage]
+
+# 4. Execute swap
+# Use the output from step 3 with your TRON transaction tool
+```
 
 ### For AI Agents
 
-**Old Workflow:**
-1. Read SKILL.md (long, scattered info)
-2. Search for API endpoint
-3. Manually construct parameters
-4. Hope for the best
-
-**New Workflow:**
-1. Check Quick Reference Card in SKILL.md
-2. Use lookup_token.js for addresses
-3. Follow 3-step workflow with checklists
-4. Refer to complete_swap_example.md if stuck
-
-### For Developers
-
-**New Tools Available:**
-```bash
-# Find token addresses
-node skills/sunswap/scripts/lookup_token.js USDT nile
-
-# Convert API quote to MCP parameters
-node skills/sunswap/scripts/format_swap_params.js '<quote>' '<recipient>' '<network>' [slippage]
+Tell your AI agent:
+```
+Please read skills/sunswap/SKILL.md and help me swap 10 USDT to TRX on Nile testnet
 ```
 
-**New Documentation:**
-- Quick reference at top of SKILL.md
-- Complete example in examples/complete_swap_example.md
-- Error handling tables in workflow files
-- Gas fee estimates in 02_balance_check.md
+---
+
+## Documentation Structure
+
+```
+sunswap/
+├── SKILL.md                    # Main documentation (AI agents read this)
+├── README.md                   # Quick start guide
+├── CHANGELOG.md                # This file
+├── INTENT_LOCK.md              # TRX vs WTRX rules
+├── workflow/                   # Step-by-step guides
+│   ├── 00_token_lookup.md
+│   ├── 01_price_quote.md
+│   ├── 02_balance_check.md
+│   ├── 03_approve.md
+│   └── 04_execute_swap.md
+├── examples/                   # Complete examples
+│   ├── README.md
+│   ├── complete_swap_example.md
+│   └── swap_with_approve.md
+├── resources/                  # Configuration files
+│   ├── common_tokens.json
+│   └── sunswap_contracts.json
+└── scripts/                    # Helper tools
+    ├── lookup_token.js
+    └── format_swap_params.js
+```
 
 ---
 
-## Breaking Changes
+## Critical Rules
 
-None. All changes are additive and backward compatible.
-
----
-
-## Files Changed
-
-### Modified
-- `SKILL.md` - Added quick reference card, examples section
-- `workflow/01_price_quote.md` - Added error table, TRX/WTRX warning, checklist
-- `workflow/02_balance_check.md` - Added gas fee section, checklist
-- `workflow/03_approve.md` - Added checklist
-- `workflow/04_execute_swap.md` - Added checklist, success template
-- `scripts/format_swap_params.js` - Enhanced output with validation details
-
-### Added
-- `scripts/lookup_token.js` - New token lookup tool
-- `examples/complete_swap_example.md` - Full swap walkthrough (TRX input)
-- `examples/swap_with_approve.md` - Full swap walkthrough (TRC20 input with approve)
-- `examples/README.md` - Examples directory overview
-- `CHANGELOG.md` - This file
+1. **Respect User's Token Choice** - Never substitute TRX for WTRX or vice versa
+2. **Check Balance First** - Always verify sufficient balance before attempting swap
+3. **Approve When Needed** - TRC20 tokens require approval, native TRX does not
+4. **Use Helper Scripts** - Don't manually construct parameters
+5. **Verify Gas Fees** - Ensure at least 100 TRX for gas
 
 ---
 
-## Statistics
+## Known Limitations
 
-- **New Files**: 4
-- **Modified Files**: 6
-- **New Tools**: 2
-- **New Examples**: 1
-- **Total Checklists**: 4 (20 items total)
-- **Documentation Improvements**: 8 major areas
+- Nile testnet requires explicit ABI parameters for contract calls
+- Price quotes are time-sensitive and should be refreshed before execution
+- Slippage tolerance should be higher on testnet (10%) vs mainnet (0.5-2%)
 
 ---
 
-## Feedback
+## Future Improvements
 
-These improvements were made based on real usage patterns and common mistakes observed during AI agent interactions. The goal is to make the skill more reliable, easier to use, and harder to misuse.
-
-**Key Principles:**
-1. Show, don't tell (complete examples)
-2. Fail fast with clear errors
-3. Provide tools, not just documentation
-4. Make the happy path obvious
-5. Make mistakes hard to make
-
----
-
-## Next Steps
-
-Potential future improvements:
-- [ ] Add more examples (USDT → TRX, multi-hop swaps)
+Potential enhancements for future versions:
+- [ ] Add more token swap examples
 - [ ] Create interactive validation script
 - [ ] Add price impact calculator
 - [ ] Create swap simulator for testing
 - [ ] Add transaction monitoring tool
+- [ ] Support for limit orders
+- [ ] Multi-hop swap optimization guide
 
 ---
 
-**Version**: 2.3.0  
-**Date**: 2026-02-08  
-**Author**: TRC-8004 Team
+## License
+
+MIT License - See [LICENSE](../../LICENSE) for details
+
+---
+
+**Version**: 1.0.0  
+**Date**: 2026-02-09  
+**Author**: bankofai  
+**Repository**: [bankofai/skills-tron](https://github.com/bankofai/skills-tron)

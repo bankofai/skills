@@ -3,7 +3,7 @@
 AI Agent Skills Library - Reusable capability modules for AI agents
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/GitHub-open--aibank%2Fskills--tron-blue)](https://github.com/open-aibank/skills-tron)
+[![GitHub](https://img.shields.io/badge/GitHub-bankofai%2Fskills--tron-blue)](https://github.com/bankofai/skills-tron)
 
 ## What is a Skill?
 
@@ -27,14 +27,40 @@ Completes DEX trade
 
 ## Quick Start
 
-### 1. Clone Repository
+### For OpenClaw Users (Recommended)
+
+**Complete installation** (skills + MCP server):
+```bash
+git clone https://github.com/bankofai/skills-tron.git
+cd skills-tron/installer
+./install.sh
+```
+
+**Or install individually**:
+```bash
+# Skills only
+./install-skills.sh
+
+# MCP server only
+./install-mcp-server.sh
+```
+
+This will:
+1. Install skills to `~/.openclaw/skills/`
+2. Configure `mcp-server-tron` in `~/.mcporter/mcporter.json`
+
+See [installer/README.md](installer/README.md) for more options.
+
+### For Developers / Manual Installation
+
+#### 1. Clone Repository
 
 ```bash
-git clone https://github.com/open-aibank/skills-tron.git
+git clone https://github.com/bankofai/skills-tron.git
 cd skills-tron
 ```
 
-### 2. Browse Available Skills
+#### 2. Browse Available Skills
 
 ```bash
 ls -la
@@ -43,7 +69,7 @@ ls -la
 Currently available:
 - **sunswap/** - SunSwap DEX Trading (TRON token swaps)
 
-### 3. Use a Skill
+#### 3. Use a Skill
 
 Tell your AI Agent:
 ```
@@ -134,7 +160,7 @@ Edit your MCP configuration file:
   "mcpServers": {
     "mcp-server-tron": {
       "command": "npx",
-      "args": ["-y", "@open-aibank/mcp-server-tron"],
+      "args": ["-y", "@bankofai/mcp-server-tron"],
       "env": {
         "TRON_PRIVATE_KEY": "your_private_key_here"
       }
@@ -247,8 +273,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## Related Resources
 
 - **[AGENTS.md](AGENTS.md)** - Skill development guide
-- **[mcp-server-tron](https://github.com/open-aibank/mcp-server-tron)** - TRON blockchain MCP Server
-- **[TRC-8004 Project](https://github.com/open-aibank/trc-8004)** - Main project repository
+- **[mcp-server-tron](https://github.com/bankofai/mcp-server-tron)** - TRON blockchain MCP Server
+- **[TRC-8004 Project](https://github.com/bankofai/trc-8004)** - Main project repository
 
 ---
 
@@ -258,6 +284,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-**Repository**: [open-aibank/skills-tron](https://github.com/open-aibank/skills-tron)  
-**Last Updated**: 2026-02-07  
-**Maintainer**: Open AI Bank Team
+**Repository**: [bankofai/skills-tron](https://github.com/bankofai/skills-tron)  
+**Last Updated**: 2026-02-09  
+**Maintainer**: Bank of AI Team

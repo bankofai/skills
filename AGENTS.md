@@ -369,5 +369,5 @@ A: Use resource files (JSON) with network-specific configs.
 
 ---
 
-**Last Updated**: 2026-02-07  
-**Maintainer**: TRC-8004 Team
+**Last Updated**: 2026-02-09  
+**Maintainer**: Bank of AI Team

@@ -67,7 +67,7 @@ const fees = response.poolFees.map(f => parseInt(f)); // Full length
 
 ## Version
 
-2.0.0 (2026-02-08)
+1.0.0 (2026-02-09)
 
 ## License
 

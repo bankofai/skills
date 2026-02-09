@@ -1,8 +1,8 @@
 # Skills Project Structure
 
-**Last Updated**: 2026-02-07  
+**Last Updated**: 2026-02-09  
 **Version**: 1.0.0  
-**Repository**: [open-aibank/skills-tron](https://github.com/open-aibank/skills-tron)
+**Repository**: [bankofai/skills-tron](https://github.com/bankofai/skills-tron)
 
 ---
 
@@ -22,7 +22,7 @@ skills-tron/
 ├── AGENTS.md                    # Developer guide for creating skills
 ├── PROJECT_STRUCTURE.md         # This file - Project structure overview
 │
-├── sunswap/                     # ✅ SunSwap V2 Router (Mainnet)
+├── sunswap/                     # ✅ SunSwap Smart Router (Mainnet & Nile)
 │   ├── README.md                # Skill overview
 │   ├── SKILL.md                 # Main instruction file for AI agents
 │   ├── HOW_TO_USE_IN_KIRO.md    # Kiro-specific usage guide
@@ -157,7 +157,7 @@ tags:
 
 ### Standard MCP Tools (No ABI Required)
 
-Used by: `sunswap/` (V2 Router on Mainnet)
+Used by: `sunswap/` (Smart Router)
 
 ```json
 {
@@ -259,14 +259,13 @@ Used by: `sunswap-smart-router-nile/` (Smart Router on Nile)
 ### v1.0.0 (2026-02-07)
 
 **Added**:
-- ✅ SunSwap V2 Router skill (mainnet)
-- ✅ SunSwap Smart Router skill (Nile testnet)
+- ✅ SunSwap Smart Router skill (Mainnet & Nile)
 - ✅ MCP ABI parameter support
 - ✅ Complete test results documentation
 - ✅ Parameter rules documentation
 
 **Tested**:
-- ✅ V2 Router swaps on mainnet
+- ✅ Smart Router swaps on Mainnet
 - ✅ Smart Router queries on Nile
 - ✅ Smart Router swaps on Nile
 - ✅ MCP tools with custom ABI
@@ -279,11 +278,6 @@ Used by: `sunswap-smart-router-nile/` (Smart Router on Nile)
 ## Future Skills (Planned)
 
 ### High Priority
-
-1. **SunSwap Smart Router (Mainnet)**
-   - Adapt Nile skill for mainnet
-   - Test with real tokens
-   - Document gas costs
 
 2. **JustLend Protocol**
    - Lending and borrowing
@@ -325,9 +319,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Resources
 
-- **Main Repository**: https://github.com/open-aibank/skills-tron
-- **MCP Server**: https://github.com/open-aibank/mcp-server-tron
-- **TRC-8004 Project**: https://github.com/open-aibank/trc-8004
+- **Main Repository**: https://github.com/bankofai/skills-tron
+- **MCP Server**: https://github.com/bankofai/mcp-server-tron
 - **TRON Documentation**: https://developers.tron.network/
 
 ---
@@ -338,6 +331,6 @@ MIT License - see [LICENSE](LICENSE) file
 
 ---
 
-**Maintained by**: Open AI Bank Team  
-**Last Updated**: 2026-02-07  
+**Maintained by**: Bank of AI Team  
+**Last Updated**: 2026-02-09  
 **Version**: 1.0.0
