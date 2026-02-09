@@ -59,7 +59,7 @@ ls -la
 
 Currently available:
 - **sunswap/** - SunSwap DEX Trading (TRON token swaps)
-- **x402-payment-tron (Payment Protocol)** - This implements the x402 protocol standard for the TRON Virtual Machine (TVM).
+- **x402-tron-payment (Payment Protocol)** - Pay for x402-enabled Agent endpoints using TRC20 tokens (USDT/USDD) on TRON.
 
 #### 3. Use a Skill
 
@@ -83,12 +83,15 @@ skills-tron/
 ├── LICENSE                # MIT License
 ├── CONTRIBUTING.md        # Contribution guidelines
 ├── AGENTS.md              # Developer guide (how to create new skills)
-└── sunswap/               # SunSwap DEX Trading skill
-    ├── README.md          # Skill description
-    ├── SKILL.md           # Main instruction file (AI Agent reads this)
-    ├── examples/          # Usage examples
-    ├── resources/         # Configuration files (contract addresses, token lists, etc.)
-    └── scripts/           # Helper scripts
+├── sunswap/               # SunSwap DEX Trading skill
+│   ├── README.md          # Skill description
+│   ├── SKILL.md           # Main instruction file (AI Agent reads this)
+│   ├── examples/          # Usage examples
+│   ├── resources/         # Configuration files (contract addresses, token lists, etc.)
+│   └── scripts/           # Helper scripts
+└── x402_tron_payment/     # x402 Payment Protocol skill
+    ├── SKILL.md           # Main instruction file
+    └── dist/              # Compiled tool scripts
 ```
 
 ---
@@ -96,6 +99,7 @@ skills-tron/
 ## Available Skills
 
 - **[SunSwap Skills](sunswap/README.md)**: DEX Trading (TRON token swaps)
+- **[x402-tron-payment](x402_tron_payment/SKILL.md)**: TRC20 Payments for AI Agents (USDT/USDD)
 
 ---
 
