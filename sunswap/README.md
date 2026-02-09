@@ -7,21 +7,7 @@ Execute token swaps on SunSwap DEX using Smart Router for optimal routing across
 
 ## Quick Start
 
-**4-Step Workflow**:
-1. 💰 **Price Quote** - Query Smart Router API
-2. 📊 **Balance Check** - Verify balance and allowance
-3. ✅ **Approve** - Authorize Router (if needed)
-4. 🔄 **Execute Swap** - Perform swap
-
-**Read**: [SKILL.md](SKILL.md) for complete instructions
-
-## Key Features
-
-- ✅ **Smart Router API** for optimal routing
-- ✅ **Multi-pool support** (V1/V2/V3/PSM/Curve)
-- ✅ **Mainnet & Nile testnet** support
-- ✅ **Direct curl usage** (no local wrappers)
-- ✅ **Complete ABI definitions** included
+**Instructions**: Read [SKILL.md](SKILL.md) for complete usage instructions.
 
 ## Files
 
@@ -36,13 +22,6 @@ Execute token swaps on SunSwap DEX using Smart Router for optimal routing across
 |---------|-------------|--------------|
 | **Mainnet** | `TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax` | `https://rot.endjgfsv.link/swap/router` |
 | **Nile** | `TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3` | `https://tnrouter.endjgfsv.link/swap/router` |
-
-## Example: Query Price
-
-```bash
-# Mainnet: 50 USDT → TRX
-curl 'https://rot.endjgfsv.link/swap/router?fromToken=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t&toToken=TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR&amountIn=50&typeList=PSM,CURVE,CURVE_COMBINATION,WTRX,SUNSWAP_V1,SUNSWAP_V2,SUNSWAP_V3'
-```
 
 ## Critical Notes
 
@@ -63,7 +42,7 @@ const fees = response.poolFees.map(f => parseInt(f)); // Full length
 
 ## Dependencies
 
-- `mcp-server-tron` - TRON blockchain MCP server
+- [OpenClaw Extension](https://github.com/bankofai/openclaw-extension)
 
 ## Version
 

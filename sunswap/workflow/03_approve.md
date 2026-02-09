@@ -13,8 +13,10 @@ Authorize the SunSwap Smart Router to withdraw tokens from your wallet. This is 
 
 - **Contract**: Token Address (e.g., USDT: `TR7...`)
 - **Spender**: Router Address (`TKzxd...` mainnet)
-- **Amount**: Raw Integer (e.g., `100000000` = 100 USDT).
-    *   *Tip*: Approve slightly more than needed (e.g., 2x) to save gas on future swaps, or exact amount for security.
+- **Amount**:
+    *   **Default**: `1461501637330902918203684832716283019655932542975` (MaxUint160).
+    *   **Override**: Only use a specific amount if the user EXPLICITLY asks for it.
+    *   **Reason**: Approvals cost gas (~15 TRX). Frequent small approvals are wasteful. Max approval saves gas for all future swaps.
 
 ## Wait & Verify
 1.  **Wait**: 5-15 seconds for confirmation.

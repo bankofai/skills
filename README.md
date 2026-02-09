@@ -94,18 +94,7 @@ skills-tron/
 
 ## Available Skills
 
-### 🔄 SunSwap DEX Trading
-
-**Function**: Execute token swaps on TRON blockchain
-
-**Dependencies**: `mcp-server-tron`
-
-**Features**:
-- Query DEX prices
-- Execute token swaps
-- Slippage protection
-
-**Quick Start**: See [sunswap/README.md](sunswap/README.md)
+- **[SunSwap Skills](sunswap/README.md)**: DEX Trading (TRON token swaps)
 
 ---
 

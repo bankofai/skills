@@ -54,19 +54,7 @@ skills-tron/
 - Mainnet: `TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax`
 - Nile Testnet: `TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3`
 
-**Features**:
-- Query token swap prices via Smart Router API
-- Execute token swaps on V1/V2/V3/PSM pools
-- Slippage protection
-- Support for common tokens (USDT, USDC, TRX, etc.)
 
-**Dependencies**:
-- `mcp-server-tron` (standard version)
-
-**Test Results**:
-- ✅ Price queries: Working
-- ✅ Token swaps: Working
-- ✅ Slippage protection: Working
 
 **Key Files**:
 - `SKILL.md` - Main AI agent instructions
@@ -153,48 +141,7 @@ tags:
 
 ---
 
-## MCP Tool Integration
 
-### Standard MCP Tools (No ABI Required)
-
-Used by: `sunswap/` (Smart Router)
-
-```json
-{
-  "contractAddress": "TMn1qrmYUMSTXo9babrJLzepKZoPC7M6Sy",
-  "functionName": "getAmountsOut",
-  "args": ["100000000", ["USDT_ADDRESS", "TRX_ADDRESS"]],
-  "network": "mainnet"
-}
-```
-
-### MCP Tools with ABI Parameter
-
-Used by: `sunswap-smart-router-nile/` (Smart Router on Nile)
-
-```json
-{
-  "contractAddress": "TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3",
-  "functionName": "WTRX",
-  "network": "nile",
-  "abi": [
-    {
-      "outputs": [{"type": "address"}],
-      "name": "WTRX",
-      "stateMutability": "View",
-      "type": "Function"
-    }
-  ]
-}
-```
-
-**Why ABI is needed**:
-- Smart Router's on-chain ABI is incomplete
-- Missing `tuple` components in function definitions
-- TronWeb cannot parse incomplete ABI
-- Solution: Provide custom ABI in MCP calls
-
----
 
 ## Development Workflow
 
@@ -292,7 +239,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## Resources
 
 - **Main Repository**: https://github.com/bankofai/skills-tron
-- **MCP Server**: https://github.com/bankofai/mcp-server-tron
+- **OpenClaw Extension**: https://github.com/bankofai/openclaw-extension
 - **TRON Documentation**: https://developers.tron.network/
 
 ---
