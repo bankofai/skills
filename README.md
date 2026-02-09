@@ -59,6 +59,7 @@ ls -la
 
 Currently available:
 - **sunswap/** - SunSwap DEX Trading (TRON token swaps)
+- **x402-payment-tron (Payment Protocol)** - This implements the x402 protocol standard for the TRON Virtual Machine (TVM).
 
 #### 3. Use a Skill
 
