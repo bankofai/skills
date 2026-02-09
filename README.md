@@ -71,47 +71,8 @@ skills-tron/
 
 ## Available Skills
 
-### 🔄 [SunSwap Skill](sunswap/README.md)
-
-Execute token swaps on SunSwap DEX using Smart Router for optimal routing across V1/V2/V3/PSM pools.
-
-**Features**:
-- ✅ Multi-version pool routing (V1/V2/V3/PSM)
-- ✅ Price quotes with slippage protection
-- ✅ Token approval management
-- ✅ Balance checking
-- ✅ Mainnet & Nile testnet support
-
-**Quick Example**:
-```
-"Read the sunswap skill and help me swap 100 USDT to TRX"
-```
-
-**Networks**:
-- Mainnet: Smart Router `TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax`
-- Nile Testnet: Smart Router `TMEkn7zwGJvJsRoEkiTKfGRGZS2yMdVmu3`
-
-**Documentation**: [sunswap/SKILL.md](sunswap/SKILL.md)
-
-### 💳 [x402 TRON Payment](x402_tron_payment/SKILL.md)
-
-Enables agent payments on TRON network using x402 protocol with TRC20 tokens (USDT/USDD).
-
-**Features**:
-- ✅ Pay for AI agent services with USDT/USDD
-- ✅ Automatic payment verification
-- ✅ Protected content access
-
-**Quick Example**:
-```
-"Read the x402_tron_payment skill and explain how it works"
-```
-
-### 🎮 [x402 Payment Demo](x402_tron_payment_demo/SKILL.md)
-
-Demo skill showing x402 payment protocol in action by fetching a protected image.
-
----
+ **[SunSwap Skills](sunswap/README.md)**: DEX Trading (TRON token swaps)
+- **[x402-tron-payment](x402_tron_payment/SKILL.md)**: TRC20 Payments for AI Agents (USDT/USDD)
 
 ## How to Use Skills
 
