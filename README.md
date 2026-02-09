@@ -33,23 +33,14 @@ Completes DEX trade
 ```bash
 git clone https://github.com/bankofai/skills-tron.git
 cd skills-tron/installer
-./install.sh
-```
-
-**Or install individually**:
-```bash
-# Skills only
 ./install-skills.sh
-
-# MCP server only
-./install-mcp-server.sh
 ```
 
-This will:
-1. Install skills to `~/.openclaw/skills/`
-2. Configure `mcp-server-tron` in `~/.mcporter/mcporter.json`
 
-See [installer/README.md](installer/README.md) for more options.
+
+This will install skills to `~/.openclaw/skills/`.
+
+**Note**: You also need the [OpenClaw Extension](https://github.com/bankofai/openclaw-extension) for these skills to work.
 
 ### For Developers / Manual Installation
 
@@ -122,61 +113,10 @@ skills-tron/
 
 ### Prerequisites
 
-1. ✅ Installed and configured AI Agent (Claude Desktop / Cursor / Antigravity)
-2. ✅ Required tools configured (e.g., `mcp-server-tron`)
-
-### Usage Steps
-
-**Step 1**: Find the skill you need
-```bash
-cd sunswap
-cat README.md
-```
-
-**Step 2**: Tell AI Agent to use the skill
-```
-Please read skills/sunswap/SKILL.md and help me complete XXX task
-```
-
-**Step 3**: AI Agent executes automatically
-- Reads SKILL.md instructions
-- Calls appropriate tools (e.g., MCP tools)
-- Returns results
-
----
-
-## Configure Dependencies
-
-### SunSwap Skill requires mcp-server-tron
-
-Edit your MCP configuration file:
-
-**Antigravity**: `~/.config/antigravity/mcp.json`
-**Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Cursor**: `.cursor/mcp.json`
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "TRON_PRIVATE_KEY": "your_private_key_here"
-      }
-    }
-  }
-}
-```
-
-**Restart your AI Agent** for changes to take effect.
-
-**Test**:
-```
-Get my TRON wallet address
-```
-
-If it returns an address, configuration is successful!
+1. ✅ Installed AI Agent (OpenClaw)
+2. ✅ Installed **OpenClaw Extension** (for TRON capabilities)
+   - Download: [bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)
+   - Follow instructions in that repository to set up the MCP server.
 
 ---
 
@@ -273,9 +213,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## Related Resources
 
 - **[AGENTS.md](AGENTS.md)** - Skill development guide
-- **[mcp-server-tron](https://github.com/bankofai/mcp-server-tron)** - TRON blockchain MCP Server
-- **[TRC-8004 Project](https://github.com/bankofai/trc-8004)** - Main project repository
-
+- **[OpenClaw Extension](https://github.com/bankofai/openclaw-extension)** - TRON MCP Server & Tools
 ---
 
 ## License

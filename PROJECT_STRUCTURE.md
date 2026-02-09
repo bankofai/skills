@@ -275,34 +275,6 @@ Used by: `sunswap-smart-router-nile/` (Smart Router on Nile)
 
 ---
 
-## Future Skills (Planned)
-
-### High Priority
-
-2. **JustLend Protocol**
-   - Lending and borrowing
-   - Interest rate queries
-   - Collateral management
-
-3. **JustStables**
-   - Stablecoin swaps
-   - Low slippage trades
-
-### Medium Priority
-
-4. **AAVE on TRON**
-   - Cross-chain lending
-
-5. **SUN Token Staking**
-   - Stake SUN tokens
-   - Claim rewards
-
-6. **NFT Trading**
-   - APENFT marketplace
-   - NFT transfers
-
----
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.

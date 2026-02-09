@@ -15,8 +15,6 @@
   - `PROJECT_STRUCTURE.md`: Detailed project organization and file structure.
 - **Installation & Setup**:
   - `install-skills.sh`: Standalone script to verify and install skills to `~/.openclaw/skills/`.
-  - `install-mcp-server.sh`: Interactive configuration tool for `mcp-server-tron` with security best practices.
-  - **Security**: Added `SECURITY.md` detailing private key management (recommending environment variables).
 
 ### Fixed
 - Standardized project structure and naming conventions
