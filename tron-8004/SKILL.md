@@ -1,6 +1,6 @@
 ---
 name: tron-8004
-description: TRC-8004 Trustless Agents - Register, discover, and build reputation for AI agents on TRON and BSC blockchains. Use when registering agents on-chain, querying agent registries, giving/receiving reputation feedback, or interacting with the AI agent trust layer. Multi-chain support: TRON ✅ | BSC ✅
+description: TRC-8004 Trustless Agents - Register and manage AI agent identities on TRON and BSC blockchains with on-chain reputation tracking
 ---
 
 # TRC-8004: Trustless Agents on TRON
