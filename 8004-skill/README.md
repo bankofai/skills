@@ -83,7 +83,7 @@ node scripts/register.js --uri "ipfs://..." --chain bsc --network testnet
 # Install Node.js and npm
 # https://nodejs.org/
 
-# Install dependencies (from skills-tron/erc-8004 directory)
+# Install dependencies (from skills-tron/8004-skill directory)
 npm install
 
 # Configure private key (works for both TRON and BSC):

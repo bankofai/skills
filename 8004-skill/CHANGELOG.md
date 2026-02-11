@@ -1,6 +1,12 @@
 # Changelog
 
-All notable changes to the ERC-8004 skill will be documented in this file.
+All notable changes to the 8004-skill skill will be documented in this file.
+
+## [1.5.0] - 2026-02-11
+
+### Changed
+- **Renamed skill**: `erc-8004` → `8004-skill` as requested
+- Updated all directory names and internal references
 
 ## [1.4.0] - 2026-02-10
 
