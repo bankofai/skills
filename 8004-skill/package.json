@@ -1,5 +1,5 @@
 {
-  "name": "erc-8004",
+  "name": "8004-skill",
   "version": "1.0.0",
   "description": "ERC-8004 Trustless Agents - On-chain identity, reputation, and validation for AI agents on TRON and BSC",
   "main": "index.js",

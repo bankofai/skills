@@ -1,5 +1,5 @@
 ---
-name: erc-8004
+name: 8004-skill
 description: ERC-8004 Trustless Agents - Register and manage AI agent identities on TRON and BSC blockchains with on-chain reputation tracking
 ---
 

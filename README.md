@@ -31,9 +31,9 @@ Completes DEX trade
 
 Currently available:
 - **sunswap/** - SunSwap DEX trading skill for TRON token swaps
-- **tron-8004/** - TRC-8004 Trustless Agents - On-chain identity and reputation for AI agents
-- **x402_tron_payment/** - Enables agent payments on TRON network (x402 protocol)
-- **x402_tron_payment_demo/** - Demo of x402 payment protocol
+- **8004-skill/** - TRC-8004 Trustless Agents - On-chain identity and reputation for AI agents
+- **x402-payment/** - Enables agent payments on TRON network (x402 protocol)
+- **x402-payment-demo/** - Demo of x402 payment protocol
 
 ### 2. Use a Skill
 
@@ -63,14 +63,14 @@ skills-tron/
 │   ├── examples/          # Usage examples
 │   ├── resources/         # Configuration files (contract addresses, token lists, etc.)
 │   └── scripts/           # Helper scripts
-├── tron-8004/             # TRC-8004 Trustless Agents skill
+├── 8004-skill/             # TRC-8004 Trustless Agents skill
 │   ├── README.md          # Skill description
 │   ├── SKILL.md           # Main instruction file
 │   ├── lib/               # Contract ABIs and configurations
 │   ├── scripts/           # Node.js scripts for agent operations
 │   ├── templates/         # Registration templates
 │   └── examples/          # Usage examples
-└── x402_tron_payment/     # x402 Payment Protocol skill
+└── x402-payment/     # x402 Payment Protocol skill
     ├── SKILL.md           # Main instruction file
     └── dist/              # Compiled tool scripts
 ```
@@ -80,8 +80,8 @@ skills-tron/
 ## Available Skills
 
  **[SunSwap Skills](sunswap/README.md)**: DEX Trading (TRON token swaps)
-- **[TRC-8004 Trustless Agents](tron-8004/README.md)**: On-chain identity, reputation, and validation for AI agents
-- **[x402-tron-payment](x402_tron_payment/SKILL.md)**: TRC20 Payments for AI Agents (USDT/USDD)
+- **[TRC-8004 Trustless Agents](8004-skill/README.md)**: On-chain identity, reputation, and validation for AI agents
+- **[x402-payment](x402-payment/SKILL.md)**: TRC20 Payments for AI Agents (USDT/USDD)
 
 ## How to Use Skills
 
